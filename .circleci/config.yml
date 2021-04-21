@@ -1,10 +1,23 @@
 version: 2.1
 jobs:
+  dependencies:
+    docker:
+      - image: centos:centos8.3.2011
+    steps:
+      - run: yum install -y gcc git
+      - run: mkdir -p dependencies && cd dependencies
+      - run:
+          name: Clone Liboptions (code2828)
+          command: |
+            git clone https://github.com/code2828/liboptions.git
+            cd liboptions
+            git checkout -b origin/master
+            make
   build:
     docker:
       - image: centos:centos8.3.2011 # the primary container, where your job's commands are run
         #auth:
-          #username: mydockerhub-user
+          #username: code2828
           #password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout # check out the code in the project directory
